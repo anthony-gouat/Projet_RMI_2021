@@ -9,7 +9,8 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
     }
 
     @Override
-    public boolean verifSoldeClient(String nom, String numeroCarte, String dateExpiration, String cryptogramme) throws RemoteException {
+    public boolean verifSoldeClient(String nom, String numeroCarte, String dateExpiration, String cryptogramme, double montant) throws RemoteException {
+
         return false;
     }
 }

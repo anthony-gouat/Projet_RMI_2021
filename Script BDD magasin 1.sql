@@ -1,7 +1,7 @@
 -- Script BDD projet RMI 2021
 
 CREATE DATABASE IF NOT exists PROJET_RMI_Magasin_1;
-USE PROJET_RMI;
+USE PROJET_RMI_Magasin_1;
 
 DROP TABLE IF EXISTS utilisateur;
 DROP TABLE IF EXISTS ligne_panier;
