@@ -3,6 +3,7 @@
 CREATE DATABASE IF NOT exists PROJET_RMI_Magasin_1;
 USE PROJET_RMI;
 
+DROP TABLE IF EXISTS utilisateur;
 DROP TABLE IF EXISTS ligne_panier;
 DROP TABLE IF EXISTS panier;
 DROP TABLE IF EXISTS article;
@@ -41,4 +42,13 @@ CREATE TABLE IF NOT EXISTS ligne_panier(
    FOREIGN KEY (article_id) REFERENCES article(id),
    FOREIGN KEY (panier_id) REFERENCES panier(id),
    PRIMARY KEY(article_id,panier_id)
+);
+
+create table IF NOT EXISTS utilisateur
+(
+    identifiant varchar(20) not null,
+    password varchar(20) not null,
+    panier_id int not null,
+    foreign key (panier_id) references panier (id),
+    PRIMARY KEY(identifiant)
 );
