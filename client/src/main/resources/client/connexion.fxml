@@ -7,16 +7,15 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.Connexion">
    <children>
-      <TextField id="txt_identifiant" layoutX="224.0" layoutY="187.0" promptText="Identifiant" />
-      <Button id="btn_connexion" layoutX="301.0" layoutY="280.0" mnemonicParsing="false" text="Connexion" />
-      <Label layoutX="218.0" layoutY="54.0" text="Espace de connexion">
+      <TextField id="txt_identifiant" layoutX="224.0" layoutY="187.0" promptText="Identifiant" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="187.0" />
+      <Button id="btn_connexion" layoutX="301.0" layoutY="280.0" mnemonicParsing="false" text="Connexion" AnchorPane.leftAnchor="301.0" AnchorPane.rightAnchor="226.33333333333331" AnchorPane.topAnchor="280.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="218.0" layoutY="54.0" text="Espace de connexion" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="50.0">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <PasswordField id="txt_mdp" layoutX="224.0" layoutY="229.0" promptText="Mot de passe" />
+      <PasswordField id="txt_mdp" layoutX="224.0" layoutY="229.0" promptText="Mot de passe" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="229.0" />
    </children>
 </AnchorPane>

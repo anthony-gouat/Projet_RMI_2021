@@ -6,11 +6,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.Panier">
    <children>
-      <Button id="btn_retour_magasin" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Retour au magasin" />
-      <VBox layoutX="407.0" layoutY="14.0" prefHeight="361.0" prefWidth="179.0">
+      <Button id="btn_retour_magasin" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Retour au magasin" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="15.0" />
+      <VBox layoutX="407.0" layoutY="14.0" prefHeight="361.0" prefWidth="179.0" AnchorPane.leftAnchor="410.66666666666663" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
          <children>
             <Label alignment="TOP_CENTER" prefHeight="17.0" prefWidth="181.0" text="Total" />
             <Button id="btn_commander" alignment="BOTTOM_CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="147.0" text="Commander">
