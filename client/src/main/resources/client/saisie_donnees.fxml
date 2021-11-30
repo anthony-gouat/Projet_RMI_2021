@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.SaisieDonnees">
+   <children>
+      <TextField id="txt_titulaire" layoutX="14.0" layoutY="84.0" promptText="Nom titulaire carte" AnchorPane.topAnchor="90.0" />
+      <TextField id="txt_numero" layoutX="14.0" layoutY="121.0" prefHeight="25.0" prefWidth="374.0" promptText="Numéro de carte" AnchorPane.topAnchor="130.0" />
+      <DatePicker id="txt_expiration" layoutX="14.0" layoutY="151.0" promptText="Expiration" AnchorPane.topAnchor="170.0" />
+      <PasswordField id="txt_cryptogramme" layoutX="14.0" layoutY="183.0" promptText="Cryptogramme" AnchorPane.topAnchor="210.0" />
+      <Button disable="true" layoutX="461.0" layoutY="360.0" mnemonicParsing="false" style="-fx-background-color: green;" text="Valider" />
+      <Button layoutX="528.0" layoutY="360.0" mnemonicParsing="false" style="-fx-background-color: red;" text="Annuler" />
+      <Label layoutX="171.0" layoutY="14.0" text="Saisie des coordonnées bancaire">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="321.0" layoutY="183.0" text="Label" />
+      <VBox layoutX="14.0" layoutY="252.0" prefHeight="121.0" prefWidth="426.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Récapitulatif">
+               <VBox.margin>
+                  <Insets left="170.0" right="170.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
