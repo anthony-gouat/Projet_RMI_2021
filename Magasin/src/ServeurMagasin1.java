@@ -12,7 +12,7 @@ public class ServeurMagasin1 {
 //        }
         try {
             Magasin m = new Magasin();
-            m.connexionClient("meyer", "test");
+            //m.connexionClient("meyer", "test");
         } catch (RemoteException e) {
             e.printStackTrace();
         }

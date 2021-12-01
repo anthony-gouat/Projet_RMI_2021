@@ -1,5 +1,6 @@
 import java.rmi.RemoteException;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Magasin {
 
@@ -12,8 +13,12 @@ public class Magasin {
     static final String USER = "root";
     static final String PASS = "";
 
+    //attribut
+    ArrayList<Article> lesArticles;
+
     public Magasin() throws RemoteException {
         super();
+        lesArticles = new ArrayList<Article>();
 
         try {
             //STEP 2: Register JDBC driver
@@ -60,5 +65,37 @@ public class Magasin {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /*
+    Récupère tout les articles connus dans la BDD pour 1 magasin
+    @return Liste de tout les article du magasin
+     */
+    public void recupereArticle() throws RemoteException {
+        Statement stmt = null;
+
+        try {
+            //STEP 4 : Execute a query
+            System.out.println("SELECT ARTICLE MAGASIN");
+            stmt = conn.createStatement();
+
+            String req = "SELECT * FROM article";
+
+            ResultSet result = stmt.executeQuery(req);
+
+            while (result.next()) {
+                int id = result.getInt("id");
+                String lien_image = result.getString("lien_image");
+                String nom = result.getString("nom");
+                double prix = result.getDouble("prix");
+                String description = result.getString("description");
+                int type_article_id = result.getInt("type_article_id");
+                int stock  = result.getInt("stock");
+
+                Article a = new Article(id, lien_image, nom, prix, description, type_article_id, stock);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
