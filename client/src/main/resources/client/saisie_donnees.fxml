@@ -10,22 +10,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.SaisieDonnees">
    <children>
-      <TextField id="txt_titulaire" layoutX="14.0" layoutY="84.0" promptText="Nom titulaire carte" AnchorPane.topAnchor="90.0" />
-      <TextField id="txt_numero" layoutX="14.0" layoutY="121.0" prefHeight="25.0" prefWidth="374.0" promptText="Numéro de carte" AnchorPane.topAnchor="130.0" />
-      <DatePicker id="txt_expiration" layoutX="14.0" layoutY="151.0" promptText="Expiration" AnchorPane.topAnchor="170.0" />
-      <PasswordField id="txt_cryptogramme" layoutX="14.0" layoutY="183.0" promptText="Cryptogramme" AnchorPane.topAnchor="210.0" />
-      <Button disable="true" layoutX="461.0" layoutY="360.0" mnemonicParsing="false" style="-fx-background-color: green;" text="Valider" />
-      <Button layoutX="528.0" layoutY="360.0" mnemonicParsing="false" style="-fx-background-color: red;" text="Annuler" />
-      <Label layoutX="171.0" layoutY="14.0" text="Saisie des coordonnées bancaire">
+      <TextField id="txt_titulaire" layoutX="14.0" layoutY="84.0" promptText="Nom titulaire carte" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="90.0" />
+      <TextField id="txt_numero" layoutX="14.0" layoutY="121.0" prefHeight="25.0" prefWidth="374.0" promptText="Numéro de carte" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="130.0" />
+      <DatePicker id="txt_expiration" layoutX="14.0" layoutY="151.0" promptText="Expiration" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="170.0" />
+      <PasswordField id="txt_cryptogramme" layoutX="14.0" layoutY="183.0" promptText="Cryptogramme" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="210.0" />
+      <Button disable="true" layoutX="461.0" layoutY="360.0" mnemonicParsing="false" style="-fx-background-color: green;" text="Valider" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="360.0" />
+      <Button layoutX="528.0" layoutY="360.0" mnemonicParsing="false" style="-fx-background-color: red;" text="Annuler" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="360.0" />
+      <Label layoutX="171.0" layoutY="14.0" text="Saisie des coordonnées bancaire" AnchorPane.leftAnchor="171.0" AnchorPane.rightAnchor="170.33333333333331" AnchorPane.topAnchor="14.0">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="321.0" layoutY="183.0" text="Label" />
-      <VBox layoutX="14.0" layoutY="252.0" prefHeight="121.0" prefWidth="426.0">
+      <VBox layoutX="14.0" layoutY="252.0" prefHeight="121.0" prefWidth="426.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="252.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" text="Récapitulatif">
                <VBox.margin>
