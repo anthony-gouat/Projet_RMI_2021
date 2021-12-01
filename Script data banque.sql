@@ -10,4 +10,4 @@ INSERT INTO clients VALUES
     (NULL, 'MEYER',2,9721.21),
     (NULL, 'GOUAT',3,672496.27),
     (NULL, 'MOREL',4,12.31),
-    (NULL, 'ZEMMOUR',5,-951.21)
+    (NULL, 'ZEMMOUR',5,-951.21);
