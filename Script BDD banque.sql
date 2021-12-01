@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS carte(
       id INT NOT NULL auto_increment,
       numero varchar(16),
       date_exp date,
-      crytpo varchar(3),
+      crypto varchar(3),
       PRIMARY KEY(id)
 );
 

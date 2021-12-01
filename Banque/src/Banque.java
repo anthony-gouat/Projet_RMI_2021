@@ -1,6 +1,5 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.sql.*;
 public class Banque extends UnicastRemoteObject implements BanqueInterface {
     private Connection conn = null;
@@ -26,7 +25,6 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
                     DB_URL+DB, USER, PASS);
             System.out.println("Connected database successfully...");
 
-
         } catch (Exception se) {
             se.printStackTrace();
         }
@@ -35,22 +33,47 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
 
     @Override
     public boolean verifSoldeClient(String nom, String numeroCarte, String dateExpiration, String cryptogramme, double montant) throws RemoteException {
-        Statement stmt = null;
-
         try{
             //STEP 4: Execute a query
-            System.out.println("SELECT clients");
-            stmt = conn.createStatement();
+            System.out.println("SELECT client");
 
-            String sql = "SELECT * FROM projet_rmi_banque.clients";
+            String sql = "SELECT * FROM clients "
+                        + "JOIN carte ON carte.id = clients.carte_id "
+                        + "WHERE carte.numero = ? ;";
 
-            ResultSet rs = stmt.executeQuery(sql);
-            while(rs.next()){
-                System.out.println(rs.getInt("id"));
-                System.out.println(rs.getInt("carte_id"));
-                System.out.println(rs.getString("nom"));
-                System.out.println(rs.getDouble("solde"));
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1,numeroCarte);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                String nomClient = rs.getString("nom");
+                String date_exp = rs.getString("date_exp");
+                String crypto = rs.getString("crypto");
+                double solde = rs.getDouble("solde");
+                System.out.println(date_exp);
+                System.out.println(rs.getString("id"));
+                return (nomClient.equals(nom) && crypto.equals(cryptogramme) && date_exp.equals(dateExpiration) && solde > montant);
             }
+        }catch (SQLException sqle){
+            sqle.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean debite(String numeroCarte, double montant) throws RemoteException {
+        try{
+            System.out.println("Debite client");
+
+            String sql = "UPDATE clients "
+                    + "JOIN carte ON carte.id = carte_id "
+                    + "SET solde=(solde-?) "
+                    + "WHERE carte.numero = ? ;";
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setDouble(1,montant);
+            stmt.setString(2,numeroCarte);
+            stmt.executeUpdate();
+            return true;
         }catch (SQLException sqle){
             sqle.printStackTrace();
         }
