@@ -9,7 +9,7 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.PageMagasin">
    <children>
       <TextField id="txt_recherche_article" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="540.0" promptText="Rechercher un article" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0" />
-      <Button id="btn_recherche_article" layoutX="544.0" layoutY="11.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.leftAnchor="554.6666666666666" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+      <Button id="btn_recherche_article" layoutX="544.0" layoutY="11.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
          <graphic>
             <ImageView fitHeight="37.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -18,7 +18,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button id="btn_panier" layoutX="524.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.leftAnchor="520.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="50.0">
+      <Button id="btn_panier" layoutX="524.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="50.0">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
