@@ -1,6 +1,10 @@
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Banque extends UnicastRemoteObject implements BanqueInterface {
     private Connection conn = null;
     static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
@@ -60,22 +64,35 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
     }
 
     @Override
-    public boolean debite(String numeroCarte, double montant) throws RemoteException {
-        try{
-            System.out.println("Debite client");
+    public boolean debite(String numeroCarte,String nom, double montant,String magasin) throws RemoteException {
+        if(demandeConfirmation(nom,magasin,montant)){
+            try{
+                System.out.println("Debite client");
 
-            String sql = "UPDATE clients "
-                    + "JOIN carte ON carte.id = carte_id "
-                    + "SET solde=(solde-?) "
-                    + "WHERE carte.numero = ? ;";
+                String sql =  "UPDATE clients "
+                            + "JOIN carte ON carte.id = carte_id "
+                            + "SET solde=(solde-?) "
+                            + "WHERE carte.numero = ? ;";
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDouble(1,montant);
-            stmt.setString(2,numeroCarte);
-            stmt.executeUpdate();
-            return true;
-        }catch (SQLException sqle){
-            sqle.printStackTrace();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setDouble(1,montant);
+                stmt.setString(2,numeroCarte);
+                stmt.executeUpdate();
+                return true;
+            }catch (SQLException sqle){
+                sqle.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public boolean demandeConfirmation(String nom,String magasin, double montant) throws RemoteException {
+        try {
+            int port = 8000;
+            ClientInterface client = (ClientInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/"+nom);
+            return client.demandeConfirmation(magasin,montant);
+        } catch (Exception e) {
+            System.out.println ("Banque exception: " + e);
         }
         return false;
     }

@@ -14,7 +14,7 @@ public class classdetest {
             Date dateexp = formatter.parse(date);
             String dateFormatDB = formatterDB.format(dateexp);
 
-            if(banque.verifSoldeClient("DUPOND","1234567891011120",dateFormatDB,"465",345)) System.out.println(banque.debite("1234567891011120",345));
+            if(banque.verifSoldeClient("DUPOND","1234567891011120",dateFormatDB,"465",345)) System.out.println(banque.debite("1234567891011120","DUPOND",345,"magasin test"));
 
         } catch (Exception e) {
             System.out.println ("Banque exception: " + e);

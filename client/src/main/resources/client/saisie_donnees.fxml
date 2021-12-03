@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.SaisieDonnees">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controllers.SaisieDonneesController">
    <children>
       <TextField id="txt_titulaire" layoutX="14.0" layoutY="84.0" promptText="Nom titulaire carte" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="90.0" />
       <TextField id="txt_numero" layoutX="14.0" layoutY="121.0" prefHeight="25.0" prefWidth="374.0" promptText="Numéro de carte" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="130.0" />
