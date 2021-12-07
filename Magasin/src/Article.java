@@ -1,4 +1,5 @@
 public class Article {
+
     //attributs privé
     private int id, type_article_id, stock;
     private String nom, lien_image, description;
@@ -12,5 +13,9 @@ public class Article {
         this.description = descriptionA;
         this.type_article_id = type_article_idA;
         this.stock = stockA;
+    }
+
+    public int getId() {
+        return id;
     }
 }
