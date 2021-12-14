@@ -18,5 +18,6 @@
             </ImageView>
          </graphic>
       </Button>
+      <Button id="btn_magasin_1" layoutX="44.0" layoutY="78.0" mnemonicParsing="false" text="Button" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="100.0" />
    </children>
 </AnchorPane>
