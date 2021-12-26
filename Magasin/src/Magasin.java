@@ -35,6 +35,7 @@ public class Magasin {
         } catch (Exception se) {
             se.printStackTrace();
         }
+        recupereArticle();
     }
 
     /**
