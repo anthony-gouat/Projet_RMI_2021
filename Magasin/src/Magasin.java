@@ -1,8 +1,9 @@
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class Magasin {
+public class Magasin extends UnicastRemoteObject implements MagasinInterface {
 
     private Connection conn = null;
     static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
