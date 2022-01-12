@@ -7,7 +7,7 @@ public class classdetest {
 
         try {
             int port = 8000;
-            BanqueInterface banque = (BanqueInterface) Naming.lookup("rmi://127.0.0.3:" + port + "/banque");
+            BanqueInterface banque = (BanqueInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/banque");
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat formatterDB = new SimpleDateFormat("yyyy-MM-dd");
             String date = "01/10/2022";

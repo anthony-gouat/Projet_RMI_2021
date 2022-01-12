@@ -45,7 +45,7 @@ public class Connexion extends Application {
     @FXML
     public void OnClickBtn(ActionEvent actionEvent) throws IOException, NotBoundException {
         int port = 8000;
-        MagasinInterface magasin1 = (MagasinInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/Magasin1");
+        MagasinInterface magasin1 = (MagasinInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/magasin1");
         String identifiant = txt_identifiant.getText();
         String mdp = txt_mdp.getText();
         if (magasin1.connexionClient(identifiant, mdp)) {

@@ -45,6 +45,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
      * @param pwd
      * @return true si les champs saisie correspondent
      */
+    @Override
     public boolean connexionClient(String username, String pwd) {
         PreparedStatement stmt = null;
 
