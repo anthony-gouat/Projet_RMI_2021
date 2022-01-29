@@ -6,10 +6,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controllers.AccueilController">
+<AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.Accueil">
    <children>
-      <TextField id="txt_recherche_magasin" prefHeight="25.0" prefWidth="540.0" promptText="Rechercher un magasin" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0" />
-      <Button id="btn_recherche_magasin" fx:id="btnRecherche" layoutX="534.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#afficheMagasin" prefHeight="25.0" prefWidth="25.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+      <TextField fx:id="txt_recherche_magasin" prefHeight="25.0" prefWidth="540.0" promptText="Rechercher un magasin" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0" />
+      <Button fx:id="btn_recherche_magasin" layoutX="534.0" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
          <graphic>
             <ImageView fitHeight="37.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -18,5 +18,6 @@
             </ImageView>
          </graphic>
       </Button>
+      <Button fx:id="btn_mag1" layoutX="14.0" layoutY="76.0" mnemonicParsing="false" onAction="#OnClickBtnMag" text="Button" />
    </children>
 </AnchorPane>
