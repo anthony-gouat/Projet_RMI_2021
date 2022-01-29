@@ -1,8 +1,9 @@
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class Magasin {
+public class Magasin extends UnicastRemoteObject implements MagasinInterface {
 
     private Connection conn = null;
     static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
@@ -15,10 +16,12 @@ public class Magasin {
 
     //attribut
     ArrayList<Article> lesArticles;
+    ArrayList<Article> panier;
 
     public Magasin() throws RemoteException {
         super();
         lesArticles = new ArrayList<Article>();
+        panier = new ArrayList<Article>();
 
         try {
             //STEP 2: Register JDBC driver
@@ -33,15 +36,16 @@ public class Magasin {
         } catch (Exception se) {
             se.printStackTrace();
         }
+        recupereArticle();
     }
 
-    /*
-    Vérifie les identifiant utilisateur
-    @param username : Le nom d'utilisateur saisi
-    @param pwd : Le mot de passe de l'utilisateur
-    @return true si les identifiants sont correct
-    @return false si les identifiants sont incorrect
+    /**
+     * Vérifie l'identifiant et le mot de passe saisie par l'utilisateur
+     * @param username
+     * @param pwd
+     * @return true si les champs saisie correspondent
      */
+    @Override
     public boolean connexionClient(String username, String pwd) {
         PreparedStatement stmt = null;
 
@@ -67,11 +71,12 @@ public class Magasin {
         return false;
     }
 
-    /*
-    Récupère tout les articles connus dans la BDD pour 1 magasin
-    @return Liste de tout les article du magasin
+    /**
+     * Récupère tout les articles connus dans la BDD pour 1 magasin
+     * @return liste de tout les articles du magasin
+     * @throws RemoteException
      */
-    public void recupereArticle() throws RemoteException {
+    public ArrayList<Article> recupereArticle() throws RemoteException {
         Statement stmt = null;
 
         try {
@@ -93,9 +98,37 @@ public class Magasin {
                 int stock  = result.getInt("stock");
 
                 Article a = new Article(id, lien_image, nom, prix, description, type_article_id, stock);
+                lesArticles.add(a);
+
             }
+            return lesArticles;
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * ajoute un article au panier
+     * @param id
+     */
+    public void ajoutPanier(int id) {
+        for (Article a:lesArticles) {
+            if (a.getId() == id) {
+                panier.add(a);
+            }
+        }
+    }
+
+    /**
+     * enlève un article du panier
+     * @param id
+     */
+    public void enleverPanier(int id) {
+        for (Article a:lesArticles) {
+            if (a.getId() == id) {
+                panier.remove(a);
+            }
         }
     }
 }
