@@ -45,6 +45,12 @@ INSERT INTO ligne_panier VALUES (1,14,4);
 
 INSERT INTO ligne_panier VALUES (3,9,5);
 
+INSERT INTO utilisateur VALUES ("t1","t1",1);
+INSERT INTO utilisateur VALUES ("agouat","agt",2);
+INSERT INTO utilisateur VALUES ("mmeyer","myr",3);
+INSERT INTO utilisateur VALUES ("t2","test2",4);
+INSERT INTO utilisateur VALUES ("t3","test3",5);
+
 UPDATE panier set total=(SELECT SUM(article.prix*ligne_panier.quantite) FROM ligne_panier
                          JOIN article on article.id = article_id
                          JOIN panier on panier.id = panier_id

@@ -7,7 +7,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
 
     private Connection conn = null;
     static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
-    static final String DB_URL = "jdbc:mariadb://127.0.0.1:3307/";
+    static final String DB_URL = "jdbc:mariadb://127.0.0.1:3306/";
     static final String DB = "projet_rmi_magasin_1";
 
     //  Database credentials

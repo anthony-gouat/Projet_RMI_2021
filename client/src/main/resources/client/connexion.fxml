@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.Connexion">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controllers.ConnexionController">
    <children>
       <TextField fx:id="txt_identifiant" layoutX="224.0" layoutY="187.0" promptText="Identifiant" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="187.0" />
       <Button fx:id="btn_connexion" layoutX="301.0" layoutY="280.0" mnemonicParsing="false" onAction="#OnClickBtn" text="Connexion" AnchorPane.leftAnchor="301.0" AnchorPane.rightAnchor="226.33333333333331" AnchorPane.topAnchor="280.0" />

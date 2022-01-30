@@ -18,6 +18,8 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="btn_mag1" layoutX="14.0" layoutY="76.0" mnemonicParsing="false" onAction="#OnClickBtnMag" text="Button" />
+      <Button fx:id="mag1" layoutX="63.0" layoutY="76.0" mnemonicParsing="false" onAction="#OnClickBtnMag" prefHeight="60.0" prefWidth="94.0" text="Magasin 1" />
+      <Button fx:id="mag2" layoutX="253.0" layoutY="76.0" mnemonicParsing="false" onAction="#OnClickBtnMag" prefHeight="60.0" prefWidth="94.0" text="Magasin 2" />
+      <Button fx:id="mag3" layoutX="456.0" layoutY="76.0" mnemonicParsing="false" onAction="#OnClickBtnMag" prefHeight="60.0" prefWidth="94.0" text="Magasin 3" />
    </children>
 </AnchorPane>

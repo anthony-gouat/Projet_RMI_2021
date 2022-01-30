@@ -88,7 +88,7 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
 
     public boolean demandeConfirmation(String nom,String magasin, double montant) throws RemoteException {
         try {
-            int port = 8000;
+            int port = 8800;
             ClientInterface client = (ClientInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/"+nom);
             return client.demandeConfirmation(magasin,montant);
         } catch (Exception e) {
