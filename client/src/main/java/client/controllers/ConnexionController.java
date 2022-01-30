@@ -1,20 +1,27 @@
 package client.controllers;
 
-import client.Interface.MagasinInterface;
+import client.MagasinInterface;
+import client.PageMagasin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
+import java.net.MalformedURLException;
+import java.rmi.*;
+
 
 public class ConnexionController {
 
 
     private String nomMag;
+
+    private Stage st;
 
     public ConnexionController(){
     }
@@ -35,23 +42,21 @@ public class ConnexionController {
     @FXML
     public void OnClickBtn(ActionEvent actionEvent) throws IOException, NotBoundException {
         int port = 8800;
-        System.out.println(nomMag);
-
-//        MagasinInterface magasin1 = (MagasinInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/"+nomMag);
-        MagasinInterface magasin1 = (MagasinInterface) Naming.lookup("rmi://127.0.0.1:"+port+"/mag1");
+        MagasinInterface magasin1 = (MagasinInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/"+nomMag);
+//        MagasinInterface magasin1 = (MagasinInterface) Naming.lookup("rmi://127.0.0.1:"+port+"/mag1");
         String identifiant = txt_identifiant.getText();
         String mdp = txt_mdp.getText();
         if (magasin1.connexionClient(identifiant, mdp)) {
-            //FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("page_magasin.fxml"));
-            //Scene scene = new Scene(fxmlLoader.load());
-            //Stage stage = new Stage();
-            //stage.setScene(scene);
-            //stage.show();
-            System.out.println("ok");
+            PageMagasin pgm = new PageMagasin(st,magasin1);
         } else {
             lbl_mess_erreur.setText("Identifiant et/ou mot de passe incorect");
             lbl_mess_erreur.setStyle("-fx-color-label-visible: red");
         }
+    }
+
+
+    public void setSt(Stage st) {
+        this.st = st;
     }
 
     public void setNomMag(String nomMag) {

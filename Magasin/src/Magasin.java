@@ -1,3 +1,5 @@
+import client.MagasinInterface;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
@@ -50,8 +52,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
         PreparedStatement stmt = null;
 
         try {
-            //STEP 4 : Execute a query
-            System.out.println("SELECT USER");
+            System.out.println("Connexion de : "+username);
 
             String req = "SELECT identifiant, password FROM utilisateur where identifiant = ? AND password = ?";
             stmt = conn.prepareStatement(req);
@@ -69,6 +70,37 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public ArrayList<String[]> afficheArticle() throws RemoteException {
+        Statement stmt = null;
+
+        try {
+            //STEP 4 : Execute a query
+            System.out.println("SELECT * ARTICLE MAGASIN");
+            stmt = conn.createStatement();
+
+            String req = "SELECT * FROM article";
+
+            ResultSet result = stmt.executeQuery(req);
+            ArrayList<String[]> listart = new ArrayList<>();
+            while (result.next()) {
+                String id = String.valueOf(result.getInt("id"));
+                String lien_image = result.getString("lien_image");
+                String nom = result.getString("nom");
+                String prix = String.valueOf(result.getDouble("prix"));
+                String description = result.getString("description");
+                String type_article_id = String.valueOf(result.getInt("type_article_id"));
+                String stock  = String.valueOf(result.getInt("stock"));
+                String[] article = {id,lien_image,nom,prix,description,type_article_id,stock};
+                listart.add(article);
+            }
+            return listart;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

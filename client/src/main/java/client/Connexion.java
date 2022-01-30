@@ -1,25 +1,16 @@
 package client;
 
-import client.Interface.MagasinInterface;
 import client.controllers.ConnexionController;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 
 public class Connexion extends Application {
 
-    private String nomMag = "mag1";
+    private String nomMag = "";
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -28,6 +19,7 @@ public class Connexion extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         ConnexionController ctrl = (ConnexionController) fxmlLoader.getController();
         ctrl.setNomMag(nomMag);
+        ctrl.setSt(stage);
         stage.setScene(scene);
         stage.show();
     }
