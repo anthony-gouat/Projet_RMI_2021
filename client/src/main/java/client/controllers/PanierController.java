@@ -22,20 +22,9 @@ public class PanierController {
     private Stage st;
     private int idpanier;
     private MagasinInterface magasin;
-    private float total = 0;
+    private float total = 0; // Prix total du panier
+
     public PanierController(){
-    }
-
-    public void setSt(Stage st) {
-        this.st = st;
-    }
-
-    public void setIdpanier(int idpanier) {
-        this.idpanier = idpanier;
-    }
-
-    public void setMagasin(MagasinInterface magasin) {
-        this.magasin=magasin;
     }
 
     @FXML
@@ -43,6 +32,7 @@ public class PanierController {
     @FXML
     VBox vboxarticles,vboxtotal;
     public void afficheArticlesPanier(ArrayList<String[]> listarticles){
+        // Affichage des articles dans le panier
         for (String[] article : listarticles) {
             vboxarticles.getChildren().add(miseEnPageArt(article));
             vboxtotal.getChildren().add(miseEnPageTotal(article));
@@ -54,14 +44,13 @@ public class PanierController {
         lbltotal.setAlignment(Pos.CENTER);
         pane.getChildren().add(lbltotal);
         vboxtotal.getChildren().add(pane);
-        System.out.println(total);
         if(!(total >0)){
             btn_commander.setDisable(true);
         }
 
     }
 
-
+    // Mise en page du recap
     private Pane miseEnPageTotal(String[] article){
         Pane pane = new Pane();
         Float prix = Float.parseFloat(article[3])*Integer.parseInt(article[7]);
@@ -73,6 +62,7 @@ public class PanierController {
         return pane;
     }
 
+    // Modele de mise en forme de l'affichage des articles dans le panier
     private Pane miseEnPageArt(String[] article){
         Pane pane = new Pane();
         pane.setMinHeight(180);
@@ -89,13 +79,14 @@ public class PanierController {
         lblqte.setLayoutX(300);
         lblqte.setLayoutY(35);
 
+        //Bouton pour supprimer un article du panier
         Button suppArt = new Button("X");
-        lblqte.setLayoutX(350);
-        lblqte.setLayoutY(35);
+        suppArt.setLayoutX(400);
+        suppArt.setLayoutY(35);
         suppArt.setOnAction(actionEvent -> {
             try {
-                magasin.setArticlePanier(idpanier,Integer.parseInt(article[0]),0);
-                Panier panier = new Panier(st,magasin,idpanier);
+                magasin.setArticlePanier(idpanier,Integer.parseInt(article[0]),0); // Suppression de l'article
+                Panier panier = new Panier(st,magasin,idpanier);// MAJ du panier
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -116,10 +107,22 @@ public class PanierController {
 
 
     public void OnClickBtnCommander(ActionEvent actionEvent) {
-        SaisieDonnees saisieDonnees = new SaisieDonnees(st,magasin,total,idpanier);
+        SaisieDonnees saisieDonnees = new SaisieDonnees(st,magasin,total,idpanier); // Affichage de la page de saisie des données
     }
 
     public void RetourMag(ActionEvent actionEvent) {
-        PageMagasin pgm = new PageMagasin(st,magasin,idpanier);
+        PageMagasin pgm = new PageMagasin(st,magasin,idpanier);// Retour à la page du magasin
+    }
+
+    public void setSt(Stage st) {
+        this.st = st;
+    }
+
+    public void setIdpanier(int idpanier) {
+        this.idpanier = idpanier;
+    }
+
+    public void setMagasin(MagasinInterface magasin) {
+        this.magasin=magasin;
     }
 }

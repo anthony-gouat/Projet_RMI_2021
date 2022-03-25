@@ -1,7 +1,6 @@
 package client.controllers;
 
 import client.MagasinInterface;
-import client.PageMagasin;
 import client.Panier;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +22,7 @@ public class PageMagasinController {
     private MagasinInterface magasin;
 
     @FXML
-    Button btn_panier;
+    Button btn_panier; // Bouton pour afficher le panier
 
     public PageMagasinController(){
     }
@@ -35,6 +34,8 @@ public class PageMagasinController {
         this.idpanier = idpanier;
     }
 
+
+    // Pour afficher les articles dans 3 colonnes
     @FXML
     VBox vbox_art1,vbox_art2,vbox_art3;
     public void afficheArticles(ArrayList<String[]> listarticles){
@@ -47,20 +48,26 @@ public class PageMagasinController {
         }
     }
 
+    // Modele pour mette en page les articles
     private Pane miseEnPageArt(String[] article){
         Pane pane = new Pane();
         pane.setMinHeight(180);
 
+        // Nom de l'article
         Label lblNom = new Label(article[2]);
         lblNom.setLayoutX(0);
         lblNom.setLayoutY(105);
+
+        // Déscription de l'article
         Label lblDesc = new Label(article[4]);
         lblDesc.setLayoutX(0);
         lblDesc.setLayoutY(120);
 
+        // Prix de l'article
         Label lblprix = new Label(article[3]+"€");
         lblprix.setLayoutY(140);
 
+        // Affiche l'image de l'article si il y en a une
         if(!article[1].equals("")) {
             Image image = new Image(article[1], 100, 100, true, true);
             ImageView imageView = new ImageView(image);
@@ -71,6 +78,7 @@ public class PageMagasinController {
 
         }
 
+        // Bouton pour ajouter l'article au panier
         Button btnAddPanier = new Button("ajouter au panier");
         btnAddPanier.setLayoutY(50);
         btnAddPanier.setLayoutX(120);
@@ -91,6 +99,6 @@ public class PageMagasinController {
     }
 
     public void OnClickBtnPanier(ActionEvent actionEvent) {
-        Panier panier = new Panier(st,magasin,idpanier);
+        Panier panier = new Panier(st,magasin,idpanier); // Affichage du panier
     }
 }

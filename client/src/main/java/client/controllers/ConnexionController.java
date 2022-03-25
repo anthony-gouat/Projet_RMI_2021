@@ -15,20 +15,19 @@ import java.rmi.*;
 
 public class ConnexionController {
 
+    private String nomMag; // nom du magasin
 
-    private String nomMag;
-
-    private Stage st;
+    private Stage st; // Stage utilisé pour l'affichage
 
     public ConnexionController(){
     }
 
     @FXML
-    TextField txt_identifiant;
+    TextField txt_identifiant; // champ pour l'identifiant
     @FXML
-    PasswordField txt_mdp;
+    PasswordField txt_mdp; // champ pour le mdp
     @FXML
-    Label lbl_mess_erreur;
+    Label lbl_mess_erreur; // Champ pour afficher les erreurs si il y en a
 
     /**
      * Action lors du clic sur le bouton connexion
@@ -38,20 +37,25 @@ public class ConnexionController {
      */
     @FXML
     public void OnClickBtn(ActionEvent actionEvent) throws IOException, NotBoundException {
+        // Récupération de l'interface magasin en RMI
         int port = 8800;
         MagasinInterface magasin1 = (MagasinInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/"+nomMag);
-//        MagasinInterface magasin1 = (MagasinInterface) Naming.lookup("rmi://127.0.0.1:"+port+"/mag1");
+
+        // récupération de l'identifiant et du mdp
         String identifiant = txt_identifiant.getText();
         String mdp = txt_mdp.getText();
+
+        // Connexion au magasin qui retourne le panier de l'utilisateur
         int idpanier = magasin1.connexionClient(identifiant, mdp);
+
         if (idpanier>0) {
+            // Affichage de la page du magasin
             PageMagasin pgm = new PageMagasin(st,magasin1,idpanier);
-        } else {
+        } else { // si l'id de panier = 0 alorsproblème de connexion
             lbl_mess_erreur.setText("Identifiant et/ou mot de passe incorect");
             lbl_mess_erreur.setStyle("-fx-color-label-visible: red");
         }
     }
-
 
     public void setSt(Stage st) {
         this.st = st;
