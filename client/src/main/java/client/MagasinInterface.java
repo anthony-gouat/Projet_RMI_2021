@@ -5,6 +5,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public interface MagasinInterface extends Remote {
-    public boolean connexionClient(String username, String pwd) throws RemoteException;
+    public int connexionClient(String username, String pwd) throws RemoteException;
     public ArrayList<String[]> afficheArticle() throws RemoteException;
+    public ArrayList<String[]> afficheArticlesPanier(int idpanier) throws RemoteException;
+    public void setArticlePanier(int idPanier,int idArticle,int qte) throws RemoteException;
+    public void suppressionPanier(int idPanier) throws RemoteException;
+    public int passerCommande(String nom,String numero, String dateexpiration,String crypto, float total) throws RemoteException;
 }

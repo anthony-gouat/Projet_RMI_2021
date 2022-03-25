@@ -6,9 +6,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controllers.PageMagasinController">
+<AnchorPane prefHeight="765.0" prefWidth="1571.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controllers.PageMagasinController">
    <children>
       <TextField id="txt_recherche_article" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="540.0" promptText="Rechercher un article" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="10.0" />
       <Button id="btn_recherche_article" layoutX="544.0" layoutY="11.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
@@ -20,7 +21,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button id="btn_panier" layoutX="524.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="50.0">
+      <Button fx:id="btn_panier" onAction="#OnClickBtnPanier" id="btn_panier" layoutX="524.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="50.0">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -29,9 +30,15 @@
             </ImageView>
          </graphic>
       </Button>
-      <ScrollPane layoutX="14.0" layoutY="80.0" prefHeight="313.0" prefWidth="578.0">
+      <ScrollPane layoutX="14.0" layoutY="80.0" prefHeight="679.0" prefWidth="1550.0">
          <content>
-            <VBox fx:id="vbox_art" prefHeight="313.0" prefWidth="578.0" />
+            <HBox prefHeight="677.0" prefWidth="1548.0">
+               <children>
+                  <VBox fx:id="vbox_art1" prefHeight="677.0" prefWidth="500.0" />
+                  <VBox fx:id="vbox_art2" prefHeight="677.0" prefWidth="500.0" />
+                  <VBox fx:id="vbox_art3" prefHeight="677.0" prefWidth="550.0" />
+               </children>
+            </HBox>
          </content>
       </ScrollPane>
    </children>

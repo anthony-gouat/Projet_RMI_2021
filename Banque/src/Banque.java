@@ -3,7 +3,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Banque extends UnicastRemoteObject implements BanqueInterface {
     private Connection conn = null;
@@ -36,7 +35,7 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
     }
 
     @Override
-    public boolean verifSoldeClient(String nom, String numeroCarte, String dateExpiration, String cryptogramme, double montant) throws RemoteException {
+    public boolean verifSoldeClient(String nom,String numero, String dateexpiration, String cryptogramme, float montant) throws RemoteException {
         try{
             //STEP 4: Execute a query
             System.out.println("SELECT client");
@@ -46,7 +45,7 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
                         + "WHERE carte.numero = ? ;";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1,numeroCarte);
+            stmt.setString(1,numero);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
                 String nomClient = rs.getString("nom");
@@ -55,7 +54,7 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
                 double solde = rs.getDouble("solde");
                 System.out.println(date_exp);
                 System.out.println(rs.getString("id"));
-                return (nomClient.equals(nom) && crypto.equals(cryptogramme) && date_exp.equals(dateExpiration) && solde > montant);
+                return (crypto.equals(cryptogramme) && date_exp.equals(dateexpiration) && solde > montant);
             }
         }catch (SQLException sqle){
             sqle.printStackTrace();
@@ -64,7 +63,7 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
     }
 
     @Override
-    public boolean debite(String numeroCarte,String nom, double montant,String magasin) throws RemoteException {
+    public boolean debite(String nom,String numero, String dateexpiration, String cryptogramme, float montant,String magasin) throws RemoteException {
         if(demandeConfirmation(nom,magasin,montant)){
             try{
                 System.out.println("Debite client");
@@ -76,7 +75,7 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
 
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setDouble(1,montant);
-                stmt.setString(2,numeroCarte);
+                stmt.setString(2,numero);
                 stmt.executeUpdate();
                 return true;
             }catch (SQLException sqle){

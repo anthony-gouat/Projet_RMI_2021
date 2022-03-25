@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS carte;
 CREATE TABLE IF NOT EXISTS carte(
       id INT NOT NULL auto_increment,
       numero varchar(16),
-      date_exp date,
+      date_exp varchar(7),
       crypto varchar(3),
       PRIMARY KEY(id)
 );

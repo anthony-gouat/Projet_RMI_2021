@@ -46,8 +46,9 @@ public class ConnexionController {
 //        MagasinInterface magasin1 = (MagasinInterface) Naming.lookup("rmi://127.0.0.1:"+port+"/mag1");
         String identifiant = txt_identifiant.getText();
         String mdp = txt_mdp.getText();
-        if (magasin1.connexionClient(identifiant, mdp)) {
-            PageMagasin pgm = new PageMagasin(st,magasin1);
+        int idpanier = magasin1.connexionClient(identifiant, mdp);
+        if (idpanier>0) {
+            PageMagasin pgm = new PageMagasin(st,magasin1,idpanier);
         } else {
             lbl_mess_erreur.setText("Identifiant et/ou mot de passe incorect");
             lbl_mess_erreur.setStyle("-fx-color-label-visible: red");
