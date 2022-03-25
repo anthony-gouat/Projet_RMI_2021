@@ -20,12 +20,11 @@ public class Panier extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         PanierController ctrl = (PanierController) fxmlLoader.getController();
         ArrayList<String[]> listarticles = magasin.afficheArticlesPanier(idpanier);
-        for (String[] article : listarticles) {
-            System.out.println(article[2]+" : qte = "+article[7]);
-        }
+
         ctrl.setSt(stage);
         ctrl.setIdpanier(idpanier);
         ctrl.setMagasin(magasin);
+
         stage.setScene(scene);
         ctrl.afficheArticlesPanier(listarticles);
         stage.show();

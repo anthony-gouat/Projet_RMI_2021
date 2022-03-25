@@ -15,7 +15,6 @@ public class Connexion extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Connexion.class.getResource("connexion.fxml"));
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("C:\\Users\\antho\\Documents\\Licence\\app répartie\\Projet_RMI_2021\\client\\src\\main\\resources\\hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         ConnexionController ctrl = (ConnexionController) fxmlLoader.getController();
         ctrl.setNomMag(nomMag);
@@ -28,7 +27,6 @@ public class Connexion extends Application {
 
     public Connexion(Stage stage,String nomMag) {
         this.nomMag = nomMag;
-        System.out.println(nomMag);
         try {
             start(stage);
         } catch (IOException e) {

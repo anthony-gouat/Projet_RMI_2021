@@ -1,6 +1,7 @@
 package client.controllers;
 
 import client.MagasinInterface;
+import client.PageMagasin;
 import client.Panier;
 import client.SaisieDonnees;
 import javafx.event.ActionEvent;
@@ -21,25 +22,17 @@ public class PanierController {
     private Stage st;
     private int idpanier;
     private MagasinInterface magasin;
-    private float total = 0;
+    private float total = 0; // Prix total du panier
+
     public PanierController(){
     }
 
-    public void setSt(Stage st) {
-        this.st = st;
-    }
-
-    public void setIdpanier(int idpanier) {
-        this.idpanier = idpanier;
-    }
-
-    public void setMagasin(MagasinInterface magasin) {
-        this.magasin=magasin;
-    }
-
+    @FXML
+    Button btn_commander;
     @FXML
     VBox vboxarticles,vboxtotal;
     public void afficheArticlesPanier(ArrayList<String[]> listarticles){
+        // Affichage des articles dans le panier
         for (String[] article : listarticles) {
             vboxarticles.getChildren().add(miseEnPageArt(article));
             vboxtotal.getChildren().add(miseEnPageTotal(article));
@@ -47,11 +40,17 @@ public class PanierController {
         Pane pane = new Pane();
         Label lbltotal = new Label("Total : "+ total +"€");
         lbltotal.setMaxWidth(Double.MAX_VALUE);
+
         lbltotal.setAlignment(Pos.CENTER);
         pane.getChildren().add(lbltotal);
         vboxtotal.getChildren().add(pane);
+        if(!(total >0)){
+            btn_commander.setDisable(true);
+        }
+
     }
 
+    // Mise en page du recap
     private Pane miseEnPageTotal(String[] article){
         Pane pane = new Pane();
         Float prix = Float.parseFloat(article[3])*Integer.parseInt(article[7]);
@@ -63,6 +62,7 @@ public class PanierController {
         return pane;
     }
 
+    // Modele de mise en forme de l'affichage des articles dans le panier
     private Pane miseEnPageArt(String[] article){
         Pane pane = new Pane();
         pane.setMinHeight(180);
@@ -79,19 +79,50 @@ public class PanierController {
         lblqte.setLayoutX(300);
         lblqte.setLayoutY(35);
 
-        Image image = new Image(article[1],100,100,true,true);
-        ImageView imageView = new ImageView(image);
-        imageView.setLayoutY(0);
-        imageView.maxHeight(100);
-        imageView.maxWidth(100);
+        //Bouton pour supprimer un article du panier
+        Button suppArt = new Button("X");
+        suppArt.setLayoutX(400);
+        suppArt.setLayoutY(35);
+        suppArt.setOnAction(actionEvent -> {
+            try {
+                magasin.setArticlePanier(idpanier,Integer.parseInt(article[0]),0); // Suppression de l'article
+                Panier panier = new Panier(st,magasin,idpanier);// MAJ du panier
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
 
-        pane.getChildren().addAll(lblNom,lblqte,lblprix);
-        pane.getChildren().add(imageView);
+        if(!article[1].equals("")) {
+            Image image = new Image(article[1], 100, 100, true, true);
+            ImageView imageView = new ImageView(image);
+            imageView.setLayoutY(0);
+            imageView.maxHeight(100);
+            imageView.maxWidth(100);
+            pane.getChildren().add(imageView);
+        }
+
+        pane.getChildren().addAll(lblNom,lblqte,lblprix,suppArt);
         return pane;
     }
 
 
     public void OnClickBtnCommander(ActionEvent actionEvent) {
-        SaisieDonnees saisieDonnees = new SaisieDonnees(st,magasin,total);
+        SaisieDonnees saisieDonnees = new SaisieDonnees(st,magasin,total,idpanier); // Affichage de la page de saisie des données
+    }
+
+    public void RetourMag(ActionEvent actionEvent) {
+        PageMagasin pgm = new PageMagasin(st,magasin,idpanier);// Retour à la page du magasin
+    }
+
+    public void setSt(Stage st) {
+        this.st = st;
+    }
+
+    public void setIdpanier(int idpanier) {
+        this.idpanier = idpanier;
+    }
+
+    public void setMagasin(MagasinInterface magasin) {
+        this.magasin=magasin;
     }
 }
