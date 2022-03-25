@@ -13,6 +13,7 @@ public class SaisieDonnees extends Application {
 
     MagasinInterface magasin = null;
     float total = 0;
+    int idpanier;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -23,14 +24,16 @@ public class SaisieDonnees extends Application {
         ctrl.setSt(stage);
         ctrl.setTotal(total);
         ctrl.setMagasin(magasin);
+        ctrl.setIdPanier(idpanier);
         ctrl.afficheArticles();
         stage.setScene(scene);
         stage.show();
     }
 
-    public SaisieDonnees(Stage stage,MagasinInterface magasin,float total) {
+    public SaisieDonnees(Stage stage,MagasinInterface magasin,float total,int idpanier) {
         this.magasin=magasin;
         this.total=total;
+        this.idpanier=idpanier;
         try {
             start(stage);
         } catch (Exception e) {

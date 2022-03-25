@@ -4,7 +4,7 @@ import java.rmi.registry.LocateRegistry;
 public class Serveur {
     public static void main (String[] argv) {
         try {
-            int port = 8800;
+            int port = 8810;
             LocateRegistry.createRegistry(port);
             Naming.rebind ("rmi://127.0.0.1:"+port+"/banque", new Banque());
             System.out.println ("Serveur de la banque prêt !");

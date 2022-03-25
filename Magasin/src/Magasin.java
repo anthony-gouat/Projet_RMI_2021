@@ -14,10 +14,9 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
     private Connection conn = null;
     static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
     static final String DB_URL = "jdbc:mariadb://127.0.0.1:3306/";
-    static final String DB = "projet_rmi_magasin_1";
-
+    private String nommag = "";
     //  Database credentials
-    static final String USER = "root";
+    static final String USER = "agouat2";
     static final String PASS = "";
 
     //attribut
@@ -26,11 +25,12 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
 
     BanqueInterface banque=null;
 
-    public Magasin() throws RemoteException, MalformedURLException, NotBoundException {
+    public Magasin(String db,String nommag) throws RemoteException, MalformedURLException, NotBoundException {
         super();
+        this.nommag=nommag;
         lesArticles = new ArrayList<Article>();
         panier = new ArrayList<Article>();
-        int port = 8800;
+        int port = 8810;
         banque = (BanqueInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/banque");
         try {
             //STEP 2: Register JDBC driver
@@ -40,7 +40,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
             //STEP 3: Open a connection
             System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(
-                    DB_URL+DB, USER, PASS);
+                    DB_URL+ db, USER, PASS);
             System.out.println("Connected database successfully...");
         } catch (Exception se) {
             se.printStackTrace();
@@ -209,6 +209,46 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
         }
     }
 
+    public void ajouteArticlePanier(int idPanier, int idArticle) throws RemoteException {
+        PreparedStatement stmt = null;
+        PreparedStatement set = null;
+        try {
+            System.out.println("Regarde si dans panier");
+            String reqArtDansPanier = "SELECT * FROM ligne_panier WHERE panier_id=? AND article_id=?";
+            stmt = conn.prepareStatement(reqArtDansPanier);
+            stmt.setInt(1,idPanier);
+            stmt.setInt(2,idArticle);
+            ResultSet result = stmt.executeQuery();
+            if(result.next()){
+                    System.out.println("Update article dans panier");
+                    String reqArtupdate = "UPDATE ligne_panier SET quantite=(quantite+1) WHERE panier_id=? AND article_id=?";
+                    set = conn.prepareStatement(reqArtupdate);
+                    set.setInt(1,idPanier);
+                    set.setInt(2,idArticle);
+                    set.executeUpdate();
+
+            }else{
+                System.out.println("Insert article: "+ idArticle+" dans le panier : "+idPanier);
+                String reqArtInsert = "INSERT INTO ligne_panier(quantite,article_id,panier_id) VALUES(?, ?, ?)";
+                set = conn.prepareStatement(reqArtInsert);
+                set.setInt(1,1);
+                set.setInt(2,idArticle);
+                set.setInt(3,idPanier);
+                set.executeUpdate();
+            }
+
+            PreparedStatement majstock = null;
+            System.out.println("Update stock article");
+            String reqArtStockUpdate = "UPDATE article SET stock=(stock-1) WHERE id=?";
+            majstock = conn.prepareStatement(reqArtStockUpdate);
+            majstock.setInt(1,idArticle);
+            majstock.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void suppressionPanier(int idPanier) throws RemoteException {
         PreparedStatement stmt = null;
@@ -228,7 +268,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
     public int passerCommande(String nom,String numero, String dateexpiration, String crypto, float total) throws RemoteException {
         if(!banque.verifSoldeClient(nom,numero,dateexpiration,crypto,total)){
             return 1;
-        }else if(!banque.debite(nom,numero,dateexpiration,crypto,total,"")){
+        }else if(!banque.debite(nom,numero,dateexpiration,crypto,total,this.nommag)){
             return 2;
         }
         return 0;

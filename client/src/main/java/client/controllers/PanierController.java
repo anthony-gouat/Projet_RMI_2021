@@ -1,6 +1,7 @@
 package client.controllers;
 
 import client.MagasinInterface;
+import client.PageMagasin;
 import client.Panier;
 import client.SaisieDonnees;
 import javafx.event.ActionEvent;
@@ -38,6 +39,8 @@ public class PanierController {
     }
 
     @FXML
+    Button btn_commander;
+    @FXML
     VBox vboxarticles,vboxtotal;
     public void afficheArticlesPanier(ArrayList<String[]> listarticles){
         for (String[] article : listarticles) {
@@ -47,10 +50,17 @@ public class PanierController {
         Pane pane = new Pane();
         Label lbltotal = new Label("Total : "+ total +"€");
         lbltotal.setMaxWidth(Double.MAX_VALUE);
+
         lbltotal.setAlignment(Pos.CENTER);
         pane.getChildren().add(lbltotal);
         vboxtotal.getChildren().add(pane);
+        System.out.println(total);
+        if(!(total >0)){
+            btn_commander.setDisable(true);
+        }
+
     }
+
 
     private Pane miseEnPageTotal(String[] article){
         Pane pane = new Pane();
@@ -79,19 +89,37 @@ public class PanierController {
         lblqte.setLayoutX(300);
         lblqte.setLayoutY(35);
 
-        Image image = new Image(article[1],100,100,true,true);
-        ImageView imageView = new ImageView(image);
-        imageView.setLayoutY(0);
-        imageView.maxHeight(100);
-        imageView.maxWidth(100);
+        Button suppArt = new Button("X");
+        lblqte.setLayoutX(350);
+        lblqte.setLayoutY(35);
+        suppArt.setOnAction(actionEvent -> {
+            try {
+                magasin.setArticlePanier(idpanier,Integer.parseInt(article[0]),0);
+                Panier panier = new Panier(st,magasin,idpanier);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
 
-        pane.getChildren().addAll(lblNom,lblqte,lblprix);
-        pane.getChildren().add(imageView);
+        if(!article[1].equals("")) {
+            Image image = new Image(article[1], 100, 100, true, true);
+            ImageView imageView = new ImageView(image);
+            imageView.setLayoutY(0);
+            imageView.maxHeight(100);
+            imageView.maxWidth(100);
+            pane.getChildren().add(imageView);
+        }
+
+        pane.getChildren().addAll(lblNom,lblqte,lblprix,suppArt);
         return pane;
     }
 
 
     public void OnClickBtnCommander(ActionEvent actionEvent) {
-        SaisieDonnees saisieDonnees = new SaisieDonnees(st,magasin,total);
+        SaisieDonnees saisieDonnees = new SaisieDonnees(st,magasin,total,idpanier);
+    }
+
+    public void RetourMag(ActionEvent actionEvent) {
+        PageMagasin pgm = new PageMagasin(st,magasin,idpanier);
     }
 }

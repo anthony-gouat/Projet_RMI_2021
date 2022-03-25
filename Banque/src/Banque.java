@@ -54,7 +54,7 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
                 double solde = rs.getDouble("solde");
                 System.out.println(date_exp);
                 System.out.println(rs.getString("id"));
-                return (crypto.equals(cryptogramme) && date_exp.equals(dateexpiration) && solde > montant);
+                return (crypto.equals(cryptogramme) && date_exp.equals(dateexpiration) && solde >= montant);
             }
         }catch (SQLException sqle){
             sqle.printStackTrace();
@@ -64,35 +64,26 @@ public class Banque extends UnicastRemoteObject implements BanqueInterface {
 
     @Override
     public boolean debite(String nom,String numero, String dateexpiration, String cryptogramme, float montant,String magasin) throws RemoteException {
-        if(demandeConfirmation(nom,magasin,montant)){
+
             try{
                 System.out.println("Debite client");
 
                 String sql =  "UPDATE clients "
                             + "JOIN carte ON carte.id = carte_id "
                             + "SET solde=(solde-?) "
-                            + "WHERE carte.numero = ? ;";
+                            + "WHERE carte.numero = ? AND carte.date_exp = ? AND carte.crypto = ?;";
 
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setDouble(1,montant);
                 stmt.setString(2,numero);
+                stmt.setString(3,dateexpiration);
+                stmt.setString(4,cryptogramme);
                 stmt.executeUpdate();
                 return true;
             }catch (SQLException sqle){
                 sqle.printStackTrace();
             }
-        }
         return false;
     }
 
-    public boolean demandeConfirmation(String nom,String magasin, double montant) throws RemoteException {
-        try {
-            int port = 8800;
-            ClientInterface client = (ClientInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/"+nom);
-            return client.demandeConfirmation(magasin,montant);
-        } catch (Exception e) {
-            System.out.println ("Banque exception: " + e);
-        }
-        return false;
-    }
 }
