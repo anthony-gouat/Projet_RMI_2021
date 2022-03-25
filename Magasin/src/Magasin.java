@@ -1,9 +1,13 @@
 import client.MagasinInterface;
 
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.*;
 import java.util.ArrayList;
+import java.sql.Date;
 
 public class Magasin extends UnicastRemoteObject implements MagasinInterface {
 
@@ -20,11 +24,14 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
     ArrayList<Article> lesArticles;
     ArrayList<Article> panier;
 
-    public Magasin() throws RemoteException {
+    BanqueInterface banque=null;
+
+    public Magasin() throws RemoteException, MalformedURLException, NotBoundException {
         super();
         lesArticles = new ArrayList<Article>();
         panier = new ArrayList<Article>();
-
+        int port = 8800;
+        banque = (BanqueInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/banque");
         try {
             //STEP 2: Register JDBC driver
             Class.forName(JDBC_DRIVER);
@@ -48,13 +55,13 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
      * @return true si les champs saisie correspondent
      */
     @Override
-    public boolean connexionClient(String username, String pwd) {
+    public int connexionClient(String username, String pwd) {
         PreparedStatement stmt = null;
 
         try {
             System.out.println("Connexion de : "+username);
 
-            String req = "SELECT identifiant, password FROM utilisateur where identifiant = ? AND password = ?";
+            String req = "SELECT identifiant, password ,panier_id FROM utilisateur where identifiant = ? AND password = ?";
             stmt = conn.prepareStatement(req);
             stmt.setString(1, username);
             stmt.setString(2, pwd);
@@ -62,14 +69,15 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
             if (result.next()) {
                 String nomUtil = result.getString("identifiant");
                 String mdp = result.getString("password");
+                int id = result.getInt("panier_id");
                 if (nomUtil.equals(username) && mdp.equals(pwd)) {
-                    return true;
+                    return id;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return 0;
     }
 
     @Override
@@ -101,6 +109,129 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public ArrayList<String[]> afficheArticlesPanier(int idpanier) throws RemoteException {
+        PreparedStatement stmt = null;
+
+        try {
+            System.out.println("SELECT * ARTICLE panier");
+            String req = "SELECT *,ligne_panier.quantite as quantite FROM article " +
+                    "JOIN ligne_panier ON ligne_panier.article_id=article.id " +
+                    "WHERE ligne_panier.panier_id=?";
+            stmt = conn.prepareStatement(req);
+            stmt.setInt(1,idpanier);
+            ResultSet result = stmt.executeQuery();
+            ArrayList<String[]> listart = new ArrayList<>();
+            while (result.next()) {
+                String id = String.valueOf(result.getInt("id"));
+                String lien_image = result.getString("lien_image");
+                String nom = result.getString("nom");
+                String prix = String.valueOf(result.getDouble("prix"));
+                String description = result.getString("description");
+                String type_article_id = String.valueOf(result.getInt("type_article_id"));
+                String stock  = String.valueOf(result.getInt("stock"));
+                String quantite  = String.valueOf(result.getInt("quantite"));
+                String[] article = {id,lien_image,nom,prix,description,type_article_id,stock,quantite};
+                listart.add(article);
+            }
+            return listart;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void setArticlePanier(int idPanier, int idArticle, int qte) throws RemoteException {
+        PreparedStatement stmt = null;
+        PreparedStatement set = null;
+        try {
+            System.out.println("Regarde si dans panier");
+            String reqArtDansPanier = "SELECT * FROM ligne_panier WHERE panier_id=? AND article_id=?";
+            stmt = conn.prepareStatement(reqArtDansPanier);
+            stmt.setInt(1,idPanier);
+            stmt.setInt(2,idArticle);
+            ResultSet result = stmt.executeQuery();
+            int diffstock=-qte;
+            if(result.next()){
+                diffstock+= result.getInt("quantite");
+                if(qte>0){
+                    System.out.println("Update article dans panier");
+                    String reqArtupdate = "UPDATE ligne_panier SET quantite=? WHERE panier_id=? AND article_id=?";
+                    set = conn.prepareStatement(reqArtupdate);
+                    set.setInt(1,qte);
+                    set.setInt(2,idPanier);
+                    set.setInt(3,idArticle);
+                    set.executeUpdate();
+                }else{
+                    System.out.println("Delete article dans panier");
+                    String reqArtdelet = "DELETE FROM ligne_panier WHERE panier_id=? AND article_id=?";
+                    set = conn.prepareStatement(reqArtdelet);
+                    set.setInt(1,idPanier);
+                    set.setInt(2,idArticle);
+                    set.executeUpdate();
+                }
+
+            }else if(qte>0){
+                System.out.println("Insert article: "+ idArticle+" dans le panier : "+idPanier+ " qte : "+qte);
+                String reqArtInsert = "INSERT INTO ligne_panier(quantite,article_id,panier_id) VALUES(?, ?, ?)";
+                set = conn.prepareStatement(reqArtInsert);
+                set.setInt(1,qte);
+                set.setInt(2,idArticle);
+                set.setInt(3,idPanier);
+                set.executeUpdate();
+            }
+            PreparedStatement getstock = null;
+            System.out.println("Update stock article");
+            String reqArtStock = "SELECT * FROM article WHERE id=?";
+            getstock = conn.prepareStatement(reqArtStock);
+            getstock.setInt(1,idArticle);
+            ResultSet res = getstock.executeQuery();
+
+            if(res.next()){
+                int stock = res.getInt("stock");
+                stock+=diffstock;
+                PreparedStatement majstock = null;
+                System.out.println("Update stock article");
+                String reqArtStockUpdate = "UPDATE article SET stock=? WHERE id=?";
+                majstock = conn.prepareStatement(reqArtStockUpdate);
+                majstock.setInt(1,stock);
+                majstock.setInt(2,idArticle);
+                majstock.executeUpdate();
+            }
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void suppressionPanier(int idPanier) throws RemoteException {
+        PreparedStatement stmt = null;
+        try {
+            System.out.println("Supprime le panier");
+            String reqArtDansPanier = "DELETE FROM ligne_panier WHERE panier_id=?";
+            stmt = conn.prepareStatement(reqArtDansPanier);
+            stmt.setInt(1, idPanier);
+            stmt.executeQuery();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+        @Override
+    public int passerCommande(String nom,String numero, String dateexpiration, String crypto, float total) throws RemoteException {
+        if(!banque.verifSoldeClient(nom,numero,dateexpiration,crypto,total)){
+            return 1;
+        }else if(!banque.debite(nom,numero,dateexpiration,crypto,total,"")){
+            return 2;
+        }
+        return 0;
     }
 
     /**
@@ -138,29 +269,5 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * ajoute un article au panier
-     * @param id
-     */
-    public void ajoutPanier(int id) {
-        for (Article a:lesArticles) {
-            if (a.getId() == id) {
-                panier.add(a);
-            }
-        }
-    }
-
-    /**
-     * enlève un article du panier
-     * @param id
-     */
-    public void enleverPanier(int id) {
-        for (Article a:lesArticles) {
-            if (a.getId() == id) {
-                panier.remove(a);
-            }
-        }
     }
 }

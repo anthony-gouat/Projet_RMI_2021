@@ -23,7 +23,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <VBox layoutX="14.0" layoutY="252.0" prefHeight="121.0" prefWidth="426.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="252.0">
+      <VBox fx:id="vboxrecap" layoutX="14.0" layoutY="252.0" prefHeight="121.0" prefWidth="426.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="252.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" text="Récapitulatif">
                <VBox.margin>
