@@ -10,16 +10,16 @@ import java.util.ArrayList;
 import java.sql.Date;
 
 public class Magasin extends UnicastRemoteObject implements MagasinInterface {
-
+    // Infos de connexion à au SDGBD
     private Connection conn = null;
     static final String JDBC_DRIVER = "org.mariadb.jdbc.Driver";
     static final String DB_URL = "jdbc:mariadb://127.0.0.1:3306/";
     private String nommag = "";
-    //  Database credentials
+
+    // Identifiants de la bdd
     static final String USER = "agouat2";
     static final String PASS = "";
 
-    //attribut
     ArrayList<Article> lesArticles;
     ArrayList<Article> panier;
 
@@ -30,18 +30,14 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
         this.nommag=nommag;
         lesArticles = new ArrayList<Article>();
         panier = new ArrayList<Article>();
+
+        // Récuperation de l'interface de la Banque
         int port = 8810;
         banque = (BanqueInterface) Naming.lookup("rmi://127.0.0.1:" + port + "/banque");
         try {
-            //STEP 2: Register JDBC driver
+            // Connexion à la BDD
             Class.forName(JDBC_DRIVER);
-//            Class.forName("org.mariadb.jdbc.Driver");
-
-            //STEP 3: Open a connection
-            System.out.println("Connecting to a selected database...");
-            conn = DriverManager.getConnection(
-                    DB_URL+ db, USER, PASS);
-            System.out.println("Connected database successfully...");
+            conn = DriverManager.getConnection(DB_URL+ db, USER, PASS);
         } catch (Exception se) {
             se.printStackTrace();
         }
@@ -80,13 +76,12 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
         return 0;
     }
 
+    // Récuperation des articles dans la BDD
     @Override
     public ArrayList<String[]> afficheArticle() throws RemoteException {
         Statement stmt = null;
 
         try {
-            //STEP 4 : Execute a query
-            System.out.println("SELECT * ARTICLE MAGASIN");
             stmt = conn.createStatement();
 
             String req = "SELECT * FROM article";
@@ -104,19 +99,19 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
                 String[] article = {id,lien_image,nom,prix,description,type_article_id,stock};
                 listart.add(article);
             }
-            return listart;
+            return listart; // renvoie une liste des artilcles
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    // Récuperation des articles dans le panier
     @Override
     public ArrayList<String[]> afficheArticlesPanier(int idpanier) throws RemoteException {
         PreparedStatement stmt = null;
 
         try {
-            System.out.println("SELECT * ARTICLE panier");
             String req = "SELECT *,ligne_panier.quantite as quantite FROM article " +
                     "JOIN ligne_panier ON ligne_panier.article_id=article.id " +
                     "WHERE ligne_panier.panier_id=?";
@@ -136,7 +131,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
                 String[] article = {id,lien_image,nom,prix,description,type_article_id,stock,quantite};
                 listart.add(article);
             }
-            return listart;
+            return listart; // renvoie une liste des artilcles dans le panier
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -155,7 +150,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
             stmt.setInt(2,idArticle);
             ResultSet result = stmt.executeQuery();
             int diffstock=-qte;
-            if(result.next()){
+            if(result.next()){ // si l'article est déjà dans le panier
                 diffstock+= result.getInt("quantite");
                 if(qte>0){
                     System.out.println("Update article dans panier");
@@ -165,7 +160,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
                     set.setInt(2,idPanier);
                     set.setInt(3,idArticle);
                     set.executeUpdate();
-                }else{
+                }else{ // si la quantité est a 0 alors supprile l'article du panier
                     System.out.println("Delete article dans panier");
                     String reqArtdelet = "DELETE FROM ligne_panier WHERE panier_id=? AND article_id=?";
                     set = conn.prepareStatement(reqArtdelet);
@@ -190,7 +185,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
             getstock.setInt(1,idArticle);
             ResultSet res = getstock.executeQuery();
 
-            if(res.next()){
+            if(res.next()){ // Met à jour le stock
                 int stock = res.getInt("stock");
                 stock+=diffstock;
                 PreparedStatement majstock = null;
@@ -209,6 +204,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
         }
     }
 
+    // Ajoute un article dans le panier
     public void ajouteArticlePanier(int idPanier, int idArticle) throws RemoteException {
         PreparedStatement stmt = null;
         PreparedStatement set = null;
@@ -249,6 +245,7 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
         }
     }
 
+    // Vide le panier
     @Override
     public void suppressionPanier(int idPanier) throws RemoteException {
         PreparedStatement stmt = null;
@@ -264,11 +261,12 @@ public class Magasin extends UnicastRemoteObject implements MagasinInterface {
         }
     }
 
-        @Override
+    // Passe la commande
+    @Override
     public int passerCommande(String nom,String numero, String dateexpiration, String crypto, float total) throws RemoteException {
-        if(!banque.verifSoldeClient(nom,numero,dateexpiration,crypto,total)){
+        if(!banque.verifSoldeClient(nom,numero,dateexpiration,crypto,total)){ // Vérifie le solde
             return 1;
-        }else if(!banque.debite(nom,numero,dateexpiration,crypto,total,this.nommag)){
+        }else if(!banque.debite(nom,numero,dateexpiration,crypto,total,this.nommag)){ // Débite le client
             return 2;
         }
         return 0;
